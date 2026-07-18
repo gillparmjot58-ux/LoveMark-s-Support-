@@ -18,3 +18,4 @@ client.once("ready", async () => {
 });
 
 client.login(process.env.TOKEN);
+const commandHandler = require("./handlers/commandHandler");
