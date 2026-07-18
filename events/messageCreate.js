@@ -1,6 +1,5 @@
 module.exports = async (client, message) => {
     if (message.author.bot) return;
-    if (!message.guild) return;
 
     const prefix = ";";
 
@@ -14,10 +13,9 @@ module.exports = async (client, message) => {
     if (!command) return;
 
     try {
-        await command.execute(client, message, args);
-    } catch (error) {
-        console.error(error);
-
-        message.reply("❌ An error occurred while executing this command.");
+        await command.execute(message, args);
+    } catch (err) {
+        console.error(err);
+        message.reply("❌ Error while executing command.");
     }
 };
