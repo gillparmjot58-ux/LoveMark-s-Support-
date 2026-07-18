@@ -1,26 +1,30 @@
-module.exports = async (client, message) => {
-    if (message.author.bot) return;
-    if (!message.guild) return;
+module.exports = {
+    name: "messageCreate",
 
-    const prefix = ";";
+    async execute(client, message) {
+        if (message.author.bot) return;
+        if (!message.guild) return;
 
-    if (!message.content.startsWith(prefix)) return;
+        const prefix = ";";
 
-    const args = message.content
-        .slice(prefix.length)
-        .trim()
-        .split(/\s+/);
+        if (!message.content.startsWith(prefix)) return;
 
-    const commandName = args.shift().toLowerCase();
+        const args = message.content
+            .slice(prefix.length)
+            .trim()
+            .split(/\s+/);
 
-    const command = client.commands.get(commandName);
+        const commandName = args.shift().toLowerCase();
 
-    if (!command) return;
+        const command = client.commands.get(commandName);
 
-    try {
-        await command.execute(client, message, args);
-    } catch (error) {
-        console.error(error);
-        message.reply("❌ Error while executing command.");
+        if (!command) return;
+
+        try {
+            await command.execute(client, message, args);
+        } catch (error) {
+            console.error(error);
+            message.reply("❌ Error while executing command.");
+        }
     }
 };
