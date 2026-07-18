@@ -3,6 +3,7 @@ require("dotenv").config();
 
 const connectMongo = require("./config/mongoose");
 const commandHandler = require("./handlers/commandHandler");
+const eventHandler = require("./handlers/eventHandler");
 
 const client = new Client({
     intents: [
@@ -17,6 +18,7 @@ client.once("ready", async () => {
     await connectMongo();
 
     commandHandler(client);
+    eventHandler(client);
 
     console.log(`${client.user.tag} is online!`);
 });
