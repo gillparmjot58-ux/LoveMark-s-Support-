@@ -2,6 +2,7 @@ const { Client, GatewayIntentBits } = require("discord.js");
 require("dotenv").config();
 
 const connectMongo = require("./config/mongoose");
+const commandHandler = require("./handlers/commandHandler");
 
 const client = new Client({
     intents: [
@@ -14,8 +15,10 @@ const client = new Client({
 
 client.once("ready", async () => {
     await connectMongo();
+
+    commandHandler(client);
+
     console.log(`${client.user.tag} is online!`);
 });
 
 client.login(process.env.TOKEN);
-const commandHandler = require("./handlers/commandHandler");
