@@ -8,10 +8,8 @@ module.exports = (client) => {
     for (const file of eventFiles) {
         const event = require(path.join(eventsPath, file));
 
-        const eventName = file.split(".")[0];
+        client.on(event.name, (...args) => event.execute(client, ...args));
 
-        client.on(eventName, (...args) => event(client, ...args));
-
-        console.log(`✅ Loaded event: ${eventName}`);
+        console.log(`✅ Loaded event: ${file}`);
     }
 };
