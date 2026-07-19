@@ -1,5 +1,5 @@
 const express = require("express");
-const { Client, GatewayIntentBits } = require("discord.js");
+const { Client, GatewayIntentBits, Events } = require("discord.js");
 require("dotenv").config();
 
 const connectMongo = require("./config/mongoose");
@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Web server running on port ${PORT}`);
+    console.log(`🌐 Web server running on port ${PORT}`);
 });
 
 const client = new Client({
@@ -27,13 +27,26 @@ const client = new Client({
     ]
 });
 
-client.once("ready", async () => {
-    await connectMongo();
+// Error Logs
+client.on("error", console.error);
+client.on("warn", console.warn);
+client.on("debug", () => {});
+client.on("shardError", console.error);
 
-    commandHandler(client);
-    eventHandler(client);
+// Ready Event
+client.once(Events.ClientReady, async (client) => {
+    try {
+        await connectMongo();
 
-    console.log(`${client.user.tag} is online!`);
+        commandHandler(client);
+        eventHandler(client);
+
+        console.log(`✅ ${client.user.tag} is online!`);
+        console.log(`🆔 Bot ID: ${client.user.id}`);
+    } catch (err) {
+        console.error(err);
+    }
 });
 
-client.login(process.env.TOKEN);
+// Login
+client.login(process.env.TOKEN).catch(console.error);
