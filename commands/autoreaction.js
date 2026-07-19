@@ -4,6 +4,10 @@ const embed = require("../embeds/embeds");
 const permissionEmbed = require("../embeds/permissionEmbed");
 const usageEmbed = require("../embeds/usageEmbed");
 
+const autoReactionAddEmbed = require("../embeds/autoReactionAddEmbed");
+const autoReactionRemoveEmbed = require("../embeds/autoReactionRemoveEmbed");
+const autoReactionListEmbed = require("../embeds/autoReactionListEmbed");
+
 module.exports = {
     name: "autoreaction",
 
@@ -49,10 +53,21 @@ module.exports = {
                     emoji
                 });
 
-                return message.reply(
-                    `✅ Auto reaction added for ${user} ${emoji}`
-                );
-            }
+                const total = await AutoReaction.countDocuments({
+    guildId: message.guild.id
+});
+
+return message.reply({
+    embeds: [
+        embed(
+            autoReactionAddEmbed(
+                emoji,
+                `<@${user.id}>`,
+                total
+            )
+        )
+    ]
+});
 
 
             if (type === "trigger") {
