@@ -23,7 +23,6 @@ module.exports = {
             });
         }
 
-
         const sub = args[0];
 
 
@@ -31,6 +30,7 @@ module.exports = {
         if (sub === "add") {
 
             const type = args[1];
+
 
             if (type === "user") {
 
@@ -47,30 +47,33 @@ module.exports = {
                     });
                 }
 
+
                 await AutoReaction.create({
                     guildId: message.guild.id,
                     userId: user.id,
                     emoji
                 });
 
+
                 const total = await AutoReaction.countDocuments({
-    guildId: message.guild.id
-});
-
-return message.reply({
-    embeds: [
-        embed(
-            autoReactionAddEmbed(
-                emoji,
-                `<@${user.id}>`,
-                total
-            )
-        )
-    ]
-});
+                    guildId: message.guild.id
+                });
 
 
-            if (type === "trigger") {
+                return message.reply({
+                    embeds: [
+                        embed(
+                            autoReactionAddEmbed(
+                                emoji,
+                                `<@${user.id}>`,
+                                total
+                            )
+                        )
+                    ]
+                });
+
+            }
+                        if (type === "trigger") {
 
                 const trigger = args[2];
                 const emoji = args[3];
@@ -85,30 +88,35 @@ return message.reply({
                     });
                 }
 
+
                 await AutoReaction.create({
                     guildId: message.guild.id,
                     trigger: trigger.toLowerCase(),
                     emoji
                 });
 
-                const total = await AutoReaction.countDocuments({
-    guildId: message.guild.id
-});
 
-return message.reply({
-    embeds: [
-        embed(
-            autoReactionAddEmbed(
-                emoji,
-                `"${trigger}"`,
-                total
-            )
-        )
-    ]
-});
+                const total = await AutoReaction.countDocuments({
+                    guildId: message.guild.id
+                });
+
+
+                return message.reply({
+                    embeds: [
+                        embed(
+                            autoReactionAddEmbed(
+                                emoji,
+                                `"${trigger}"`,
+                                total
+                            )
+                        )
+                    ]
+                });
+
             }
 
         }
+
 
 
         // ;autoreaction remove user @user
@@ -116,46 +124,66 @@ return message.reply({
 
             const type = args[1];
 
+
             if (type === "user") {
 
                 const user = message.mentions.users.first();
 
                 if (!user) return;
 
+
                 const data = await AutoReaction.findOneAndDelete({
-    guildId: message.guild.id,
-    userId: user.id
-});
-
-if (!data) return;
-
-return message.reply({
-    embeds: [
-        embed(
-            autoReactionRemoveEmbed(
-                data.emoji,
-                `<@${user.id}>`
-            )
-        )
-    ]
-});
+                    guildId: message.guild.id,
+                    userId: user.id
+                });
 
 
-            if (type === "trigger") {
+                if (!data) return;
+
+
+                return message.reply({
+                    embeds: [
+                        embed(
+                            autoReactionRemoveEmbed(
+                                data.emoji,
+                                `<@${user.id}>`
+                            )
+                        )
+                    ]
+                });
+
+            }
+                        if (type === "trigger") {
 
                 const trigger = args[2];
 
                 if (!trigger) return;
 
-                await AutoReaction.findOneAndDelete({
+
+                const data = await AutoReaction.findOneAndDelete({
                     guildId: message.guild.id,
                     trigger: trigger.toLowerCase()
                 });
 
-                return message.reply("✅ Trigger reaction removed.");
+
+                if (!data) return;
+
+
+                return message.reply({
+                    embeds: [
+                        embed(
+                            autoReactionRemoveEmbed(
+                                data.emoji,
+                                `"${trigger}"`
+                            )
+                        )
+                    ]
+                });
+
             }
 
         }
+
 
 
         // ;autoreaction list
@@ -165,18 +193,42 @@ return message.reply({
                 guildId: message.guild.id
             });
 
-            if (!data.length)
-                return message.reply("❌ No auto reactions found.");
+
+            if (!data.length) {
+                return message.reply({
+                    embeds: [
+                        embed(autoReactionListEmbed("No auto reactions found."))
+                    ]
+                });
+            }
+
 
             let text = "";
 
+
             data.forEach((r, i) => {
-                text += `${i + 1}. ${
-                    r.userId ? `<@${r.userId}>` : `\`${r.trigger}\``
-                } → ${r.emoji}\n`;
+
+                if (r.userId) {
+                    text += `\`${i + 1}.\` <@${r.userId}> → ${r.emoji} (${i + 1})\n`;
+                }
+
+
+                if (r.trigger) {
+                    text += `\`${i + 1}.\` Word Trigger: "${r.trigger}" → ${r.emoji} (${i + 1})\n`;
+                }
+
             });
 
-            return message.reply(text);
+
+            return message.reply({
+                embeds: [
+                    embed(
+                        autoReactionListEmbed(text)
+                    )
+                ]
+            });
+
         }
+
     }
 };
