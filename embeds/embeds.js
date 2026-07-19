@@ -1,7 +1,13 @@
 const { EmbedBuilder } = require("discord.js");
 
-module.exports = (description) => {
-    return new EmbedBuilder()
-        .setColor("#5865F2")
-        .setDescription(description);
+module.exports = (data) => {
+
+    if (typeof data === "string") {
+        return new EmbedBuilder()
+            .setColor("#5865F2")
+            .setDescription(data);
+    }
+
+    return new EmbedBuilder(data);
+
 };
