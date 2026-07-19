@@ -3,6 +3,7 @@ const Category = require("../models/Category");
 
 const embed = require("../embeds/embeds");
 const bindEmbed = require("../embeds/bindEmbed");
+const bindRemoveEmbed = require("../embeds/bindRemoveEmbed");
 const bindListEmbed = require("../embeds/bindListEmbed");
 const permissionEmbed = require("../embeds/permissionEmbed");
 const usageEmbed = require("../embeds/usageEmbed");
