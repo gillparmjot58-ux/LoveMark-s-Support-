@@ -111,10 +111,10 @@ module.exports = {
             }
 
             return message.reply({
-                embeds: [
-                    embed(`<:emoji_159:1528161527344136323> ${message.author}: Removed bind \`${trigger}\`.`)
-                ]
-            });
+    embeds: [
+        embed(bindRemoveEmbed(message.author, trigger))
+    ]
+});
         }
 
         // ;bind list
