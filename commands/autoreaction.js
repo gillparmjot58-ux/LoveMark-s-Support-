@@ -8,6 +8,7 @@ const autoReactionAddEmbed = require("../embeds/autoReactionAddEmbed");
 const autoReactionRemoveEmbed = require("../embeds/autoReactionRemoveEmbed");
 const autoReactionListEmbed = require("../embeds/autoReactionListEmbed");
 
+
 module.exports = {
     name: "autoreaction",
 
@@ -23,6 +24,7 @@ module.exports = {
             });
         }
 
+
         const sub = args[0];
 
 
@@ -36,6 +38,7 @@ module.exports = {
 
                 const user = message.mentions.users.first();
                 const emoji = args[3];
+
 
                 if (!user || !emoji) {
                     return message.reply({
@@ -73,10 +76,12 @@ module.exports = {
                 });
 
             }
-                        if (type === "trigger") {
+
+            if (type === "trigger") {
 
                 const trigger = args[2];
                 const emoji = args[3];
+
 
                 if (!trigger || !emoji) {
                     return message.reply({
@@ -129,6 +134,7 @@ module.exports = {
 
                 const user = message.mentions.users.first();
 
+
                 if (!user) return;
 
 
@@ -156,6 +162,7 @@ module.exports = {
                         if (type === "trigger") {
 
                 const trigger = args[2];
+
 
                 if (!trigger) return;
 
@@ -197,7 +204,9 @@ module.exports = {
             if (!data.length) {
                 return message.reply({
                     embeds: [
-                        embed(autoReactionListEmbed("No auto reactions found."))
+                        embed(
+                            autoReactionListEmbed("No auto reactions found.")
+                        )
                     ]
                 });
             }
