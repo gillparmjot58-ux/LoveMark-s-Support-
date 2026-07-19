@@ -91,9 +91,21 @@ return message.reply({
                     emoji
                 });
 
-                return message.reply(
-                    `✅ Trigger reaction added: \`${trigger}\` ${emoji}`
-                );
+                const total = await AutoReaction.countDocuments({
+    guildId: message.guild.id
+});
+
+return message.reply({
+    embeds: [
+        embed(
+            autoReactionAddEmbed(
+                emoji,
+                `"${trigger}"`,
+                total
+            )
+        )
+    ]
+});
             }
 
         }
@@ -110,13 +122,23 @@ return message.reply({
 
                 if (!user) return;
 
-                await AutoReaction.findOneAndDelete({
-                    guildId: message.guild.id,
-                    userId: user.id
-                });
+                const data = await AutoReaction.findOneAndDelete({
+    guildId: message.guild.id,
+    userId: user.id
+});
 
-                return message.reply("✅ User auto reaction removed.");
-            }
+if (!data) return;
+
+return message.reply({
+    embeds: [
+        embed(
+            autoReactionRemoveEmbed(
+                data.emoji,
+                `<@${user.id}>`
+            )
+        )
+    ]
+});
 
 
             if (type === "trigger") {
