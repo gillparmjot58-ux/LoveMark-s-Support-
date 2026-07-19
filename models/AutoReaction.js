@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 const autoReactionSchema = new Schema({
+
     guildId: {
         type: String,
         required: true
@@ -8,13 +9,19 @@ const autoReactionSchema = new Schema({
 
     userId: {
         type: String,
-        required: true
+        default: null
+    },
+
+    trigger: {
+        type: String,
+        default: null
     },
 
     emoji: {
         type: String,
         required: true
     }
+
 });
 
 module.exports = model("AutoReaction", autoReactionSchema);
